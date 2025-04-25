@@ -2,8 +2,16 @@
 
 ## Configuracion inicial
 
-Descargar el corpus CESS_ESP:
+Corpus CESS_ESP:
 [Enlace Oficial de nltk](https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/packages/corpora/cess_esp.zip)
+
+Instale `requeriments.txt` (ya sea en un entorno con venv o local)
+
+```python
+pip install -m requeriments.txt
+```
+
+El script automaticamente descargara este corpus, sin embargo para elegir donde descargar debe configurar la variable de entorno
 
 Configurar Variable de entorno:
 (Linux)
@@ -21,6 +29,9 @@ Ejemplo:
 │   ├── cess_esp.zip
 └── extract.py
 ```
+
+> [!NOTE]
+> Si usa Windows debe buscar en linea acerca de como usar las variables de entorno
 
 El script usa argparse que permite al usuario especificar la ruta del archivo de salida mediante el parametro -o u --output (aunque este no es obligatorio)
 
