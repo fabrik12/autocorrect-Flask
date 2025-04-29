@@ -30,11 +30,11 @@ La aplicación también permite descargar el texto corregido.
 
 ## Requisitos
 
-Python > 3.X
-Flask
-autocorrect (módulo con la clase Speller)
-nltk
-Otros módulos: json, io, difflib, etc.
+- Python > 3.X
+- Flask
+- autocorrect (módulo con la clase Speller)
+- nltk
+- Otros módulos: json, io, difflib, etc.
 
 ## Instalacion
 
@@ -87,6 +87,8 @@ python app.py
 ```bash
 flask-autocorrect/
 ├── app.py                 # Archivo principal de Flask
+├── autocorrect/           # Modulo con funciones de Speller
+├── pre_process/           # Modulo con funciones para realizar diccionario de frecuencias desde CESS_ESP
 ├── corpus/
 │   └── word_count.json    # Diccionario de frecuencias basado en CESS-ESP
 ├── static/
