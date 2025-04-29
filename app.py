@@ -3,6 +3,7 @@ from autocorrect.autocorrect import Speller
 from io import BytesIO
 import json
 from stats import generar_estadisticas
+from detectChange import highlight_correcciones
 
 app = Flask(__name__)
 spell = Speller(lang = 'es')
@@ -17,36 +18,41 @@ def import_json(spell, path):
 
 spell = import_json(spell, PATH_CORPUS)
 
+def validateForm(form):
+    input_type = form.get('input_type')
+    if input_type == 'text':
+        texto = form.get('texto', '').strip()
+        if not texto:
+            raise ValueError("Debe ingresar un texto.")
+        return texto
+    elif input_type == 'file':
+        archivo = request.files.get('archivo')
+        if not archivo or archivo.filename == '':
+            raise ValueError("Debe subir un archivo.")
+        return archivo.read().decode('utf-8')
+    else:
+        raise ValueError("Tipo de entrada desconocido.")
+
+
 @app.route('/', methods = ['GET'])
 def index():
     return render_template('index.html', texto_original = '', texto_corregido = '', error = '')
 
 @app.route('/procesar', methods = ['POST'])
 def procesar():
-    input_type = request.form.get('input_type')
-    texto_corregido = None
-    texto_original = ""
+    try:
+        texto_original = validateForm(request.form)
+        texto_corregido = spell(texto_original)
+        stats_data = generar_estadisticas(texto_original, texto_corregido)
+        texto_corregido_resaltado = highlight_correcciones(texto_original, texto_corregido)
+    except Exception as e:
+        return render_template('index.html', texto_original='', texto_corregido='', error=str(e), stats=None)
 
-    if input_type == 'text':
-        texto = request.form.get('texto').strip()
-        if not texto:
-            return render_template('index.html', texto_original = '', texto_corregido = '', error = 'Debe ingresar un texto.')
-        texto_original = texto
-        texto_corregido = corregir_texto(texto)
-    elif input_type == 'file':
-        archivo = request.files.get('archivo')
-        if not archivo or archivo.filename == '':
-            return render_template('index.html', texto_original = '', texto_corregido = '', error = 'Debe subir un archivo.')
-        contenido = archivo.read().decode('utf-8')
-        texto_original = contenido
-        texto_corregido = corregir_texto(contenido)
-    else:
-        return render_template('index.html', texto_original = '', texto_corregido = '', error = 'Error desconocido.')
-    
-    # Generar estadisticas texto original vs texto corregido
-    stats_data = generar_estadisticas(texto_original, texto_corregido)
-
-    return render_template('index.html', texto_original = texto_original, texto_corregido = texto_corregido, error = '', stats=stats_data)
+    return render_template('index.html', 
+                           texto_original = texto_original, 
+                           texto_corregido = texto_corregido, 
+                           texto_corregido_resaltado = texto_corregido_resaltado, 
+                           error = '', stats=stats_data)
 
 @app.route('/descargar', methods = ['POST'])
 def descargar():

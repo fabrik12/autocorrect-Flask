@@ -53,11 +53,26 @@
     <h3>Texto original:</h3>
     <textarea readonly>{{ texto_original }}</textarea>
 
-    <h3>Texto corregido:</h3>
-    <form action="{{ url_for('descargar') }}" method="POST">
-      <textarea name="texto_corregido" id="texto_corregido" readonly>
-{{ texto_corregido }}</textarea
+    <!-- Checkbox para mostrar/ocultar resaltado en el texto corregido -->
+    <div>
+      <input
+        type="checkbox"
+        id="toggleHighlight"
+        onchange="toggleHighlighting()"
+      />
+      <label for="toggleHighlight"
+        >Mostrar palabras corregidas resaltadas</label
       >
+    </div>
+
+    <h3>Texto corregido:</h3>
+    <div id="correctedText">{{ texto_corregido_resaltado|safe }}</div>
+    <form action="{{ url_for('descargar') }}" method="POST">
+      <input
+        type="hidden"
+        name="texto_corregido"
+        value="{{ texto_corregido }}"
+      />
       <br />
       <button type="submit">Descargar archivo corregido</button>
     </form>
