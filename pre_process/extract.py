@@ -6,6 +6,7 @@ import argparse
 
 # Principal function to process corpus and generate a JSON
 def process_corpus(output_path):
+    
     nltk.download('cess_esp')
 
     # Regular expresion for to extract spanish words
