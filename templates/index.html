@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang = "es">
+<head>
+    <meta charset = "UTF-8">
+    <meta name = "viewport" content = "width = device-width, initial-scale = 1.0">
+    <title>Autocorrector</title>
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'css/styles.css') }}">
+</head>
+<body>
+    <h1>Autocorrector</h1>
+    <!-- Detección de error en texto -->
+    {% if error %}
+    <div class = "error">{{ error }}</div>
+    {% endif %} 
+
+    <!-- Pestañas de opciones -->
+    <div>
+        <div class = "tab" onclick = "showTab('textTab')">Escribir texto</div>
+        <div class = "tab" onclick = "showTab('fileTab')">Subir archivo</div>
+    </div>
+
+    <!-- Formulario -->
+    <form action = "{{ url_for('procesar') }}" method = "POST" enctype = "multipart/form-data">
+        <!-- Para texto -->
+        <div id = "textTab" class = "tab-content">
+            <label for = "texto">Escriba su texto:</label>
+            <textarea name = "texto" id = "texto" placeholder = "Texto a corregir..."></textarea>
+        </div>
+
+        <!-- Para subir archivo -->
+        <div id = "fileTab" class = "tab-content">
+            <label for = "archivo">Suba su archivo de texto:</label>
+            <input type = "file" name = "archivo" id= "archivo">
+        </div>
+
+        <!-- Para detectar la opción de entrada -->
+        <input type = "hidden" id = "input_type" name = "input_type" value = "text">
+
+        <input type = "submit" value = "Corregir texto">
+    </form>
+
+    <h3>Texto original:</h3>
+    <textarea readonly>{{ texto_original }}</textarea>
+
+    <h3>Texto corregido:</h3>
+    <form action = "{{ url_for('descargar') }}" method = "POST">
+        <textarea name = "texto_corregido" id = "texto_corregido" readonly>{{ texto_corregido }}</textarea>
+        <br>
+        <button type = "submit">Descargar archivo corregido</button>
+    </form>
+
+    <script src = "{{ url_for('static', filename = 'js/index.js') }}"></script>
+</body>
+</html>
