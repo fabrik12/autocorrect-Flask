@@ -1,10 +1,21 @@
 from flask import Flask, render_template, request, send_file, redirect, url_for
-from autocorrect import Speller
+from autocorrect.autocorrect import Speller
 from io import BytesIO
+import json
+from stats import generar_estadisticas
 
 app = Flask(__name__)
-
 spell = Speller(lang = 'es')
+
+PATH_CORPUS = "./corpus/word_count.json"
+
+def import_json(spell, path):
+    with open(path, "r", encoding="utf-8") as f:
+        cess_esp_data = json.load(f)
+    spell = Speller(lang='es', nlp_data=cess_esp_data)
+    return spell
+
+spell = import_json(spell, PATH_CORPUS)
 
 @app.route('/', methods = ['GET'])
 def index():
@@ -13,7 +24,8 @@ def index():
 @app.route('/procesar', methods = ['POST'])
 def procesar():
     input_type = request.form.get('input_type')
-    texto_corregido = ""
+    texto_corregido = None
+    texto_original = ""
 
     if input_type == 'text':
         texto = request.form.get('texto').strip()
@@ -30,8 +42,11 @@ def procesar():
         texto_corregido = corregir_texto(contenido)
     else:
         return render_template('index.html', texto_original = '', texto_corregido = '', error = 'Error desconocido.')
+    
+    # Generar estadisticas texto original vs texto corregido
+    stats_data = generar_estadisticas(texto_original, texto_corregido)
 
-    return render_template('index.html', texto_original = texto_original, texto_corregido = texto_corregido, error = '')
+    return render_template('index.html', texto_original = texto_original, texto_corregido = texto_corregido, error = '', stats=stats_data)
 
 @app.route('/descargar', methods = ['POST'])
 def descargar():
@@ -43,6 +58,7 @@ def descargar():
 
 def corregir_texto(texto):
     return spell(texto)
+
 
 if __name__ == '__main__':
     app.run(debug = True)

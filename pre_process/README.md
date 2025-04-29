@@ -8,7 +8,7 @@ Corpus CESS_ESP:
 Instale `requeriments.txt` (ya sea en un entorno con venv o local)
 
 ```python
-pip install -m requeriments.txt
+pip install -r requeriments.txt
 ```
 
 El script automaticamente descargara este corpus, sin embargo para elegir donde descargar debe configurar la variable de entorno
