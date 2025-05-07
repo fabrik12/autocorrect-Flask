@@ -35,12 +35,14 @@ def generar_estadisticas(original, corregido):
     total_palabras = contar_palabras(original)
     total_oraciones = contar_oraciones(original)
     total_correcciones = contar_correcciones(original, corregido)
-    
+    total_no_correciones = total_palabras - total_correcciones
     porcentaje = (total_correcciones / total_palabras * 100) if total_palabras > 0 else 0
+
 
     return {
         'total_palabras': total_palabras,
         'total_oraciones': total_oraciones,
         'palabras_corregidas': total_correcciones,
+        'palabras_no_corregidas': total_no_correciones,
         'porcentaje_cambiado': round(porcentaje, 2)
     }
