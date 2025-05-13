@@ -12,7 +12,7 @@ PATH_CORPUS_DEFAULT = "./corpus/word_count.json"
 PATH_CREA_DICT = "./corpus/crea_frequency_dict.json"
 PATH_MARKD_NGRAM = "./corpus/markdavies_bigram_model.json"
 PATH_EURO_DICT = "./corpus/europarl_frequency_dict.json"
-PATH_EURO_NGRAM = "./corpus/europarl_bigram_model.zip"
+PATH_EURO_NGRAM = "./corpus/europarl_bigram_model.json"
 
 
 def create_speller(threshold, context_threshold, selected_dict, selected_ngram):
@@ -95,7 +95,6 @@ def index():
 def procesar():
     try:
         data = validateForm(request.form, request.files)
-        print("validado con exito")
         texto_original = data['texto']
 
         # Crear la instancia de Speller con los parámetros elegidos por el usuario
@@ -105,7 +104,6 @@ def procesar():
             selected_dict=data['selected_dictionary'],
             selected_ngram=data['selected_bigram']
         )
-        print(data)
 
         texto_corregido = spell.autocorrect_sentence_with_context(texto_original)
         stats_data = generar_estadisticas(texto_original, texto_corregido)

@@ -13,7 +13,7 @@ function showTab(tabId) {
     }
 }
 
-showTab('textTab');
+//showTab('textTab');
 
 function toggleHighlighting() {
     // Obtener el checkbox
@@ -30,3 +30,24 @@ function toggleHighlighting() {
         }
     });
 }
+
+
+function showTab(tabId) {
+        // Ocultar todas las pestañas
+        document.getElementById('textTab').style.display = 'none';
+        document.getElementById('fileTab').style.display = 'none';
+
+        // Mostrar la pestaña seleccionada
+        document.getElementById(tabId).style.display = 'block';
+
+        // Actualizar el campo oculto 'input_type'
+        if (tabId === 'textTab') {
+          document.getElementById('input_type').value = 'text';
+        } else if (tabId === 'fileTab') {
+          document.getElementById('input_type').value = 'file';
+        }
+      }
+
+      function updateSlider(slider, displayId) {
+        document.getElementById(displayId).innerText = slider.value;
+      }
