@@ -7,8 +7,8 @@ import textwrap
 from contextlib import closing
 from urllib.request import urlretrieve
 
-from autocorrect.constants import word_regexes, backup_urls, ipfs_gateways, ipfs_paths
-from autocorrect.typos import Word
+from .constants import word_regexes, backup_urls, ipfs_gateways, ipfs_paths
+from .typos import Word
 
 PATH = os.path.abspath(os.path.dirname(__file__))
 

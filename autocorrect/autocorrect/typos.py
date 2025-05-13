@@ -16,7 +16,7 @@ https://github.com/fifimajster/autocorrect/
 
 from itertools import chain
 
-from autocorrect.constants import alphabets
+from .constants import alphabets
 
 
 class Word:
